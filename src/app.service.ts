@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { FormFilterDto } from './app.dto';
 import { questionsFilter } from './app.util';
 import { DEFAULT_LIMIT } from './constants';
@@ -28,7 +28,10 @@ export class AppService {
     try {
       responseFilters = JSON.parse(filters);
     } catch (e) {
-      throw new Error('The JSON format of the filters is incorrect');
+      throw new HttpException(
+        'The JSON format of the filters is incorrect',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     const { responses } = sourceResult;
