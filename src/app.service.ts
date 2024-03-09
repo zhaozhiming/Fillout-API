@@ -49,10 +49,14 @@ export class AppService {
       (x) => x.questions.length > 0,
     );
 
-    resultResponse.totalResponses = resultResponse.responses.length;
-    resultResponse.pageCount = Math.ceil(
-      resultResponse.responses.length / (rest.limit || DEFAULT_LIMIT),
-    );
+    const limit = rest.limit || DEFAULT_LIMIT;
+    resultResponse.totalResponses =
+      resultResponse.totalResponses <= limit
+        ? resultResponse.responses.length
+        : resultResponse.totalResponses -
+          limit +
+          resultResponse.responses.length;
+    resultResponse.pageCount = Math.ceil(resultResponse.totalResponses / limit);
 
     return resultResponse;
   }
